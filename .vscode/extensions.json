@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "kreativ-software.csharpextensions",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.vscode-dotnet-pack",
+        "fudge.auto-using",
+        "aliasadidev.nugetpackagemanagergui",
+        "fernandoescolar.vscode-solution-explorer"
+    ]
+}
