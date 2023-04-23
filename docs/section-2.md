@@ -38,3 +38,19 @@ DELETE: The DELETE method is used to remove a resource from the server. It's lik
 Example: A user wants to delete their account on a website. The client sends an HTTP DELETE request to the server. The server then removes the user's account and sends a response confirming the successful deletion.
 
 In summary, the four key HTTP request methods in the context of a .NET Web API are like verbs that tell the server what action to perform on a resource: GET to retrieve data, POST to create new resources, PUT to update existing resources, and DELETE to remove resources. These methods allow clients to interact with the server in various ways, depending on the desired outcome.
+
+# Best Practice: Web API Structure
+
+## Service Layer
+Imagine a .NET Web API project with a single controller called BooksController that currently handles all the logic for creating, retrieving, updating, and deleting books. As the project grows, it becomes harder to maintain the code, and it's not efficient to copy and paste the same code in other controllers if needed.
+
+To improve the project's structure, we can separate the logic into different classes called services. In our case, we'll create a BookService class.
+
+Now, the BooksController should only forward data to the BookService and return the result to the client. To inject the BookService into the controller, we'll use dependency injection. This way, if we change the implementation of the BookService, we don't need to modify every controller that uses it.
+
+## Data Transfer Objects (DTOs)
+Additionally, we'll introduce Data Transfer Objects (DTOs) for better communication between the client and server. In our case, we could have a Book model that represents a database table and a BookDTO that is used to communicate with the client. For example, if the Book model has a DateCreated field that we don't want to send to the client, we can exclude it from the BookDTO.
+
+We can use a library like AutoMapper to map data between the Book model and the BookDTO easily. DTOs can be used for both sending and receiving data, allowing more flexibility in what is sent to or received from the client.
+
+By implementing these changes, the project becomes more organized and easier to maintain, allowing for better separation of concerns and more efficient use of services and DTOs.
