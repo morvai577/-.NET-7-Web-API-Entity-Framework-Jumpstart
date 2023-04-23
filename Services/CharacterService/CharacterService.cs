@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace dotnet_rpg.Services.CharacterService
 {
     public class CharacterService : ICharacterService
@@ -11,7 +6,7 @@ namespace dotnet_rpg.Services.CharacterService
             new Character(),
             new Character { Id = 1 ,Name = "Sam" }
         };
-        
+
         public List<Character> AddCharacter(Character newCharacter)
         {
             characters.Add(newCharacter);
@@ -25,7 +20,14 @@ namespace dotnet_rpg.Services.CharacterService
 
         public Character GetCharacterById(int id)
         {
-            return characters.FirstOrDefault(character => character.Id == id);
+            var character = characters.FirstOrDefault(character => character.Id == id);
+            
+            if (character is not null)
+            {
+                return character;
+            }
+            
+            throw new Exception("Character not found");
         }
     }
 }
