@@ -1,3 +1,5 @@
+global using dotnet_rpg.Models; // In C# 11, the global using directive allows you to import a namespace globally across your entire project. It simplifies and reduces the number of using directives you need to include in each file.
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
