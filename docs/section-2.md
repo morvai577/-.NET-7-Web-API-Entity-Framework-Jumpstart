@@ -56,3 +56,69 @@ We can use a library like AutoMapper to map data between the Book model and the 
 ![image](SCR-20230423-pcw.jpeg)
 
 By implementing these changes, the project becomes more organized and easier to maintain, allowing for better separation of concerns and more efficient use of services and DTOs.
+
+# Dependency Injection
+Dependency injection is a software design pattern that allows us to implement loosely coupled code. In other words, it allows us to write code that is loosely coupled to other components, making it easier to maintain and test. Dependency injection allows us to inject services into controllers, repositories, and other classes. This way, we can easily swap out the implementation of a service without having to modify the code that uses it.
+
+## Constructor Injection
+ constructor injection is a technique used to provide a class with its dependencies, like services, through its constructor. It's a way of telling a class, "Hey, here's everything you need to do your job!" This approach helps keep your code organized, maintainable, and testable.
+
+In the context of a .NET Web API project, you often have controllers that depend on services to handle the business logic. Instead of creating these service instances directly within the controller, you can "inject" them through the controller's constructor. This way, the controller doesn't need to know how to create the service – it just receives a ready-to-use instance.
+
+Constructor injection relies on an Inversion of Control (IoC) container, which manages the creation and lifetime of objects for you. In .NET, the built-in dependency injection system handles this role.
+
+Let's consider an example using a `BooksController` and a `BookService`:
+
+1. First, define an interface for the `BookService`:
+  
+      ```csharp
+      public interface IBookService
+      {
+          IEnumerable<Book> GetBooks();
+          // Other methods for handling books
+      }
+      ```
+2. Implements the `BookService`:
+
+      ```csharp
+      public class BookService : IBookService
+      {
+          public IEnumerable<Book> GetBooks()
+          {
+              // Implementation for getting books from a database, for example.
+          }
+          // Implement other methods for handling books
+      }
+      ```
+3. In the `BooksController`, inject the `IBookService` through the constructor:
+
+      ```csharp
+      [ApiController]
+      [Route("api/[controller]")]
+      public class BooksController : ControllerBase
+      {
+          private readonly IBookService _bookService;
+
+          public BooksController(IBookService bookService)
+          {
+              _bookService = bookService;
+          }
+
+          [HttpGet]
+          public IActionResult GetAllBooks()
+          {
+              var books = _bookService.GetBooks();
+              return Ok(books);
+          }
+
+          // Other action methods (POST, PUT, DELETE) would follow the same pattern.
+      }
+      ```
+4. Register the service in the IoC container (usually in the Startup.cs file):
+
+      ```csharp
+        services.AddScoped<IBookService, BookService>();
+      ```
+In this example, the `BooksController` receives an instance of `IBookService` through its constructor. The .NET dependency injection system takes care of creating the `BookService` instance and provides it to the controller.
+
+Constructor injection helps you adhere to the Dependency Inversion Principle, which states that high-level modules should not depend on low-level modules, but both should depend on abstractions (in this case, the `IBookService` interface). This makes your code more flexible, maintainable, and easier to test.
