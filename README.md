@@ -5,6 +5,7 @@ This is a repo for recording notes of learning [**.NET 7 Web API & Entity Framew
 - [Description](#description)
     - [Technical topics covered include:](#technical-topics-covered-include)
     - [Learning outcomes include:](#learning-outcomes-include)
+- [Notes](docs/section-2.md)
 
 # Description
 This course teaches you the fundamentals of back-end web development with .NET, focusing on Web API and Entity Framework. You will learn how to set up a Web API, make RESTful calls, save data persistently using Entity Framework, Code-First Migration, and SQL Server database, and implement all three types of relationships in the database.

@@ -1,9 +1,9 @@
 # Table of Contents
-- [New controllers & models]
-- [Asynchrounous implementations with async/await]
-- [Data Transfer Objects (DTOs)]
-- Best practices
 - [Model-View-Controller (MVC) pattern](#model-view-controller-mvc-pattern)
+- [HTTP Request Methods](#http-request-methods)
+- [Best Practice: Web API Structure](#best-practice-web-api-structure)
+  - [Service Layer](#service-layer)
+  - [Data Transfer Objects (DTOs)](#data-transfer-objects-dtos)
 
 # Model-View-Controller (MVC) pattern
 The Model-View-Controller (MVC) pattern is a way of organizing code in a software application that separates the data, user interface, and control logic into **three** interconnected components. This helps to make the code more modular, easier to maintain, and more straightforward to understand.
