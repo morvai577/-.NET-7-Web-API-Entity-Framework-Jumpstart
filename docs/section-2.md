@@ -133,3 +133,52 @@ These methods help you control the lifetime of your services according to the sp
 | `services.AddScoped` | Creates a new instance of the service per request (per HTTP request in Web API). Each request gets its own instance, but the instance is shared among all components within the same request.                                                       | Register a `BookService` that retrieves data from a database and needs to be request-specific: `services.AddScoped<IBookService, BookService>();` | Use when the service needs to maintain a state per request or when working with resources like database connections that should not be shared across different requests. |
 | `services.AddTransient` | Creates a new instance of the service every time it is requested. Each consumer gets its own instance, and there's no sharing of instances between consumers.                                                                                    | Register a `LoggingService` that doesn't need to maintain any state: `services.AddTransient<ILoggingService, LoggingService>();`               | Use when the service is lightweight, stateless, and doesn't need to be shared among different consumers within a request.                                        |
 | `services.AddSingleton` | Creates a single instance of the service when the application starts, and that instance is shared among all consumers throughout the application's lifetime. The same instance is reused for all requests and consumers.                              | Register a `ConfigurationService` that reads configuration data once and caches it: `services.AddSingleton<IConfigurationService, ConfigurationService>();` | Use when the service is expensive to create, doesn't need to maintain a per-request state, and can be safely shared among different consumers and requests.   |
+
+# Asynchronous Calls
+Asynchronous calls are a way to execute tasks without waiting for them to finish before moving on to the next task. It's like having multiple chefs working in a kitchen instead of just one - they can all work on different dishes simultaneously without waiting for one dish to be completed before starting the next one. This approach helps improve the responsiveness and efficiency of your application.
+
+In the context of a .NET Web API, asynchronous calls are used to handle HTTP requests without blocking the server from processing other incoming requests. When a client sends a request to the server, it doesn't have to wait for the server to finish processing the request before it can handle other requests. This can be particularly helpful when your server needs to perform time-consuming tasks like querying a database, making network calls, or processing large amounts of data.
+
+To implement asynchronous calls in .NET Web API, you can use the `async` and `await` keywords along with the `Task` class. Here's an example:
+
+1. In the `BookService`, create an asynchronous method to fetch books from a database:
+
+      ```csharp
+      public async Task<IEnumerable<Book>> GetBooksAsync()
+      {
+          // Simulate a time-consuming task like querying a database.
+          await Task.Delay(1000);
+          return new List<Book>
+          {
+              new Book { Id = 1, Title = "Book 1", Author = "Author 1" },
+              new Book { Id = 2, Title = "Book 2", Author = "Author 2" }
+          };
+      }
+      ```
+2. In the `BooksController`, create an asynchronous action method to fetch books using the asynchronous service method:
+
+      ```csharp
+      [ApiController]
+      [Route("api/[controller]")]
+      public class BooksController : ControllerBase
+      {
+          private readonly IBookService _bookService;
+
+          public BooksController(IBookService bookService)
+          {
+              _bookService = bookService;
+          }
+
+          [HttpGet]
+          public async Task<IActionResult> GetAllBooksAsync()
+          {
+              var books = await _bookService.GetBooksAsync();
+              return Ok(books);
+          }
+
+          // Other action methods (POST, PUT, DELETE) would follow the same pattern.
+      }
+      ```
+In this example, the `GetBooksAsync` method in the `BookService` simulates a time-consuming task using `await Task.Delay(1000)`. The `BooksController` then calls this method using the `await` keyword. This allows the server to handle other incoming requests while it waits for the time-consuming task to finish, improving the application's overall performance.
+
+By using asynchronous calls in your .NET Web API, you can create more efficient and responsive applications that can handle multiple requests simultaneously without blocking.
