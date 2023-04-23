@@ -22,5 +22,15 @@ namespace dotnet_rpg.Controllers
         {
             return Ok(characters.Find(character => character.Id == id));
         }
+
+        [HttpPost]
+        /// <summary>
+        /// Add a new character
+        /// </summary>
+        public ActionResult<List<Character>> AddCharacter(Character newCharacter)
+        {
+            characters.Add(newCharacter);
+            return Ok(characters);
+        }
     }
 }
