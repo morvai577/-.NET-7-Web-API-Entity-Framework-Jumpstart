@@ -53,6 +53,6 @@ Additionally, we'll introduce Data Transfer Objects (DTOs) for better communicat
 
 We can use a library like AutoMapper to map data between the Book model and the BookDTO easily. DTOs can be used for both sending and receiving data, allowing more flexibility in what is sent to or received from the client.
 
-![image](SCR-20230423-pcw.png)
+![image](SCR-20230423-pcw.jpeg)
 
 By implementing these changes, the project becomes more organized and easier to maintain, allowing for better separation of concerns and more efficient use of services and DTOs.
