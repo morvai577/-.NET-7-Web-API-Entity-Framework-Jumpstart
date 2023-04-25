@@ -6,6 +6,7 @@ namespace dotnet
         {
             CreateMap<Character, GetCharacterResDto>();
             CreateMap<AddCharacterReqDto, Character>();
+            CreateMap<UpdateCharacterReqDto, Character>();
         }
     }
 }
