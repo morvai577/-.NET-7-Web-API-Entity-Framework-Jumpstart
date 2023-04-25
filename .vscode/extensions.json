@@ -5,6 +5,7 @@
         "ms-dotnettools.vscode-dotnet-pack",
         "fudge.auto-using",
         "aliasadidev.nugetpackagemanagergui",
-        "fernandoescolar.vscode-solution-explorer"
+        "fernandoescolar.vscode-solution-explorer",
+        "ms-azuretools.vscode-docker"
     ]
 }
