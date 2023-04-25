@@ -1,5 +1,7 @@
 global using dotnet_rpg.Models; // In C# 11, the global using directive allows you to import a namespace globally across your entire project. It simplifies and reduces the number of using directives you need to include in each file.
 global using dotnet_rpg.Services.CharacterService;
+global using dotnet_rpg.DTOs.Character;
+global using AutoMapper;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly); // This is the assembly where the mapping profiles are located (in this case, the Program.cs file)
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 var app = builder.Build();
