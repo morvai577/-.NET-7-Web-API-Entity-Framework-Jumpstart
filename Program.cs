@@ -3,9 +3,12 @@ global using dotnet_rpg.Services.CharacterService;
 global using dotnet_rpg.DTOs.Character;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
+global using DotNetEnv;
 global using dotnet_rpg.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Env.Load(); // Load the .env file
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options => 
