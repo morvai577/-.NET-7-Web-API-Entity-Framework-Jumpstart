@@ -54,12 +54,7 @@ namespace dotnet_rpg.Services.CharacterService
                     throw new Exception($"Character with id {updatedCharacter.Id} not found.");
                 }
 
-                character.Name = updatedCharacter.Name;
-                character.Class = updatedCharacter.Class;
-                character.Defense = updatedCharacter.Defense;
-                character.HitPoints = updatedCharacter.HitPoints;
-                character.Intelligence = updatedCharacter.Intelligence;
-                character.Strength = updatedCharacter.Strength;
+                _mapper.Map(updatedCharacter, character);
 
                 serviceResponse.Data = _mapper.Map<GetCharacterResDto>(character);
             }
