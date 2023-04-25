@@ -57,6 +57,113 @@ We can use a library like AutoMapper to map data between the Book model and the 
 
 By implementing these changes, the project becomes more organized and easier to maintain, allowing for better separation of concerns and more efficient use of services and DTOs.
 
+Here's an example to illustrate how to use DTOs in a .NET Web API:
+
+1. Suppose you have a `Book` model class that represents a book in your application:
+
+    ```csharp
+    public class Book
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public DateTime PublicationDate { get; set; }
+        public bool IsDeleted { get; set; }
+    }
+
+2. You don't want to expose the `IsDeleted` property to the client. Instead, you create a `BookDTO` class that only includes the properties you want to share with the client:
+
+    ```csharp
+    public class BookDTO
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public DateTime PublicationDate { get; set; }
+    }
+    ```
+3. You can use a library like AutoMapper to map data between the `Book` model and the `BookDTO` easily:
+
+    - Install the AutoMapper NuGet package:
+
+        ```bash
+        dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+        ```
+
+    - In the Startup.cs file, add the following line in the ConfigureServices method to configure AutoMapper
+    
+        ```csharp
+        builder.Services.AddAutoMapper(typeof(Program).Assembly);
+        ```
+
+    - Create a mapping profile for the `Book` model and the `BookDTO` class:
+
+        ```csharp
+        public class MappingProfile : Profile
+        {
+            public MappingProfile()
+            {
+                CreateMap<Book, BookDTO>();
+            }
+        }
+        ```
+
+    - In the BookService, inject the IMapper interface and update the GetBooksAsync method to use AutoMapper:
+
+        ```csharp
+        public class BookService : IBookService
+        {
+            private readonly IMapper _mapper;
+
+            public BookService(IMapper mapper)
+            {
+                _mapper = mapper;
+            }
+
+            public async Task<List<BookDTO>> GetBooksAsync()
+            {
+                // Simulate fetching books from a database.
+                await Task.Delay(1000);
+
+                var books = new List<Book>
+                {
+                    new Book { Id = 1, Title = "Book 1", Author = "Author 1", PublicationDate = DateTime.Now, IsDeleted = false },
+                    new Book { Id = 2, Title = "Book 2", Author = "Author 2", PublicationDate = DateTime.Now, IsDeleted = false }
+                };
+
+                // Use AutoMapper to convert the list of Book objects to a list of BookDTO objects.
+                var bookDTOs = _mapper.Map<List<BookDTO>>(books);
+
+                return bookDTOs;
+            }
+        }
+        ```
+
+    - In the BooksController, inject the IBookService interface and update the GetBooksAsync method to use the BookService:
+
+        ```csharp
+        [ApiController]
+        [Route("[controller]")]
+        public class BooksController : ControllerBase
+        {
+            private readonly IBookService _bookService;
+
+            public BooksController(IBookService bookService)
+            {
+                _bookService = bookService;
+            }
+
+            [HttpGet]
+            public async Task<ActionResult<List<BookDTO>>> GetBooksAsync()
+            {
+                var books = await _bookService.GetBooksAsync();
+
+                return Ok(books);
+            }
+        }
+        ```
+4. Now, when you send a GET request to the BooksController, the client receives a list of BookDTO objects without the IsDeleted property.
+
 # Dependency Injection
 Dependency injection is a software design pattern that allows us to implement loosely coupled code. In other words, it allows us to write code that is loosely coupled to other components, making it easier to maintain and test. Dependency injection allows us to inject services into controllers, repositories, and other classes. This way, we can easily swap out the implementation of a service without having to modify the code that uses it.
 
