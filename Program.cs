@@ -2,11 +2,14 @@ global using dotnet_rpg.Models; // In C# 11, the global using directive allows y
 global using dotnet_rpg.Services.CharacterService;
 global using dotnet_rpg.DTOs.Character;
 global using AutoMapper;
-
+global using Microsoft.EntityFrameworkCore;
+global using dotnet_rpg.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DataContext>(options => 
+    options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
