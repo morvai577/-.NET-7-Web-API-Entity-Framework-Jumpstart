@@ -49,7 +49,7 @@ namespace dotnet_rpg.Services.CharacterService
 
             try
             {
-                var character = characters.FirstOrDefault(character => character.Id == updatedCharacter.Id);
+                var character = await _context.Characters.FirstOrDefaultAsync(character => character.Id == updatedCharacter.Id);
                 
                 if (character is null)
                 {
@@ -57,6 +57,7 @@ namespace dotnet_rpg.Services.CharacterService
                 }
 
                 _mapper.Map(updatedCharacter, character);
+                await _context.SaveChangesAsync();
 
                 serviceResponse.Data = _mapper.Map<GetCharacterResDto>(character);
             }
@@ -70,7 +71,7 @@ namespace dotnet_rpg.Services.CharacterService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterResDto>>> DeleteCharacter(int id)
+        public Task<ServiceResponse<List<GetCharacterResDto>>> DeleteCharacter(int id)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterResDto>>();
 
@@ -93,7 +94,7 @@ namespace dotnet_rpg.Services.CharacterService
                 serviceResponse.Message = ex.Message;
             }            
            
-            return serviceResponse;
+            return Task.FromResult(serviceResponse);
         }
     }
 }
