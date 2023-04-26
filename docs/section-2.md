@@ -164,6 +164,33 @@ Here's an example to illustrate how to use DTOs in a .NET Web API:
         ```
 4. Now, when you send a GET request to the BooksController, the client receives a list of BookDTO objects without the IsDeleted property.
 
+### Best practice: DTOs using record type instead of class
+In C#, records were introduced as a new type in C# 9.0 to make it easier to create simple, immutable, and data-oriented objects. When compared to classes, records have several advantages for creating DTOs (Data Transfer Objects)
+
+1. Conciseness: Records provide a concise syntax for defining simple data objects, reducing boilerplate code. With records, you can define a DTO in a single line of code.
+
+2. Immutability: Records are immutable by default, making them safe to share between different parts of your application. This ensures that your DTOs cannot be accidentally modified and helps prevent bugs.
+
+3. Value equality: Records provide value equality out of the box, which means that two records with the same values are considered equal, regardless of their reference. This makes it easier to compare DTOs and helps prevent errors when working with collections.
+    
+4. Pattern matching: Records are compatible with pattern matching, which is a powerful feature in C# that allows you to extract data from complex objects in a concise and readable way. This makes it easier to work with DTOs and extract the data you need.
+    
+5. Serialization: Records provide built-in support for serialization and deserialization, making it easy to convert your DTOs to and from JSON, XML, or other formats.
+
+Overall, records provide a more concise, readable, and safe way to define simple DTOs in C#. While classes can also be used to define DTOs, records provide several advantages that make them a better choice in most cases.
+
+Example:
+
+```csharp
+    public record BookDTO
+    {
+        public int Id { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public DateTime PublicationDate { get; init; }
+    }
+```
+
 # Dependency Injection
 Dependency injection is a software design pattern that allows us to implement loosely coupled code. In other words, it allows us to write code that is loosely coupled to other components, making it easier to maintain and test. Dependency injection allows us to inject services into controllers, repositories, and other classes. This way, we can easily swap out the implementation of a service without having to modify the code that uses it.
 
