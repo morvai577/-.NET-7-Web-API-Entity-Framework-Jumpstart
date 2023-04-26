@@ -1,6 +1,6 @@
 namespace dotnet_rpg.DTOs.Character
 {
-    public class UpdateCharacterReqDto
+    public record UpdateCharacterReqDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = "Frodo"; // Default value
