@@ -18,13 +18,12 @@ namespace dotnet_rpg.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterResDto>>> AddCharacter(AddCharacterReqDto newCharacter)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterResDto>>();
-
-            // The next two lines are required to map the AddCharacterReqDto to a Character object and set the Id property.
             var character = _mapper.Map<Character>(newCharacter);
-            character.Id = characters.Max(c => c.Id) + 1;
 
-            characters.Add(_mapper.Map<Character>(newCharacter));
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterResDto>(c)).ToList();
+            _context.Characters.Add(_mapper.Map<Character>(newCharacter)); // 1. The Add method adds the new character to the Characters DbSet. It is not added to the database until the SaveChanges method is called - hence why AddAsync is not used here.
+            await _context.SaveChangesAsync(); // 2. The SaveChanges method persists the data to the database. It returns the number of rows affected.
+
+            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterResDto>(c)).ToListAsync();
             return serviceResponse;
         }
 
