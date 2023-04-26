@@ -2,10 +2,6 @@ namespace dotnet_rpg.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-        private static List<Character> characters = new List<Character> {
-            new Character(),
-            new Character { Id = 1 ,Name = "Sam" }
-        };
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
@@ -71,21 +67,23 @@ namespace dotnet_rpg.Services.CharacterService
             return serviceResponse;
         }
 
-        public Task<ServiceResponse<List<GetCharacterResDto>>> DeleteCharacter(int id)
+        public async Task<ServiceResponse<List<GetCharacterResDto>>> DeleteCharacter(int id)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterResDto>>();
 
             try
             {
-                var character = characters.FirstOrDefault(character => character.Id == id);
+                var character = await _context.Characters.FirstOrDefaultAsync(character => character.Id == id);
 
                 if (character is null)
                 {
                     throw new Exception($"Character with id {id} not found.");
                 }
 
-                characters.Remove(character);
-                serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterResDto>(c)).ToList();
+                _context.Characters.Remove(character);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterResDto>(c)).ToListAsync();
             }
 
             catch (Exception ex)
@@ -94,7 +92,7 @@ namespace dotnet_rpg.Services.CharacterService
                 serviceResponse.Message = ex.Message;
             }            
            
-            return Task.FromResult(serviceResponse);
+            return serviceResponse;
         }
     }
 }
