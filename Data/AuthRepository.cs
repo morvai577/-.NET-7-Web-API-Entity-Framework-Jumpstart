@@ -9,9 +9,28 @@ namespace dotnet_rpg.Data
             _context = context;
         }
 
-        public Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>();
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Username.ToLower().Equals(username.ToLower())); // The FirstOrDefaultAsync method returns the first element of a sequence that satisfies a specified condition or a default value if no such element is found. In this example, the condition is a lambda expression that checks if the username of the user matches the username parameter.
+            if (user is null)
+            {
+                response.Success = false;
+                response.Message = "User not found.";
+            }
+
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) // 3. This method accepts a password, a password hash, and a password salt. It returns true if the password is correct and false if it is not.
+            {
+                response.Success = false;
+                response.Message = "Incorrect password.";
+            }
+
+            else
+            {
+                response.Data = user.Id.ToString();
+            }
+
+            return response;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
