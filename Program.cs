@@ -9,6 +9,7 @@ global using dotnet_rpg.Data;
 global using Microsoft.IdentityModel.Tokens;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly); // This is the assembly where the mapping profiles are located (in this case, the Program.cs file)
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // The AddAuthentication method adds the authentication services to the DI container. It configures the default scheme that will be used by the Authorize attribute.
+    .AddJwtBearer(options => // The AddJwtBearer method configures the JwtBearer authentication scheme. It tells the application how to validate JWT tokens that are passed to it. The JwtBearer scheme is the default scheme for ASP.NET Core applications.
+    {
+        options.TokenValidationParameters = new TokenValidationParameters // The TokenValidationParameters class is used to configure the validation of the token. The ValidateIssuerSigningKey property is set to true to indicate that the token will be validated using a signing key. The IssuerSigningKey property contains the security key that is used to validate the token. The ValidateIssuer and ValidateAudience properties indicate that the issuer and audience will not be validated. In a real-world application, you would want to validate these values.
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN")!)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 var app = builder.Build();
 
