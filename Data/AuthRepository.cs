@@ -82,9 +82,40 @@ namespace dotnet_rpg.Data
             }
         }
 
+        /// <summary>
+        /// The CreateToken method accepts a User object and returns a JWT token. The token contains a list of claims. A claim is a statement about a user. The claims in the token are used to identify the user and to control access to resources. In this example, the claim contains the user's Id and username.
+        /// </summary>
         private string CreateToken(User user)
         {
-            return string.Empty;
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var key = DotNetEnv.Env.GetString("TOKEN");
+
+            if(key is null || key == string.Empty)
+            {
+                throw new Exception("Token not found.");
+            }
+
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(key)); // The SymmetricSecurityKey class is used to specify the security key that is used to sign the token.
+            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature); // The SigningCredentials class is used to specify the algorithm that is used to sign the token.
+
+            // The SecurityTokenDescriptor class is used to describe the token that will be created. The Subject, Expires, and SigningCredentials properties are used to set the claims, expiration date, and security key for the token.
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims), // The Subject property is used to set the claims for the token.
+                Expires = DateTime.UtcNow.AddDays(7), // The Expires property is used to set the expiration date for the token.
+                SigningCredentials = credentials // The SigningCredentials property is used to set the security key and algorithm that are used to sign the token.
+            };
+
+            // The JwtSecurityTokenHandler class is used to create and validate JWT tokens.
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor); // The CreateToken method is used to create the token.
+
+            return tokenHandler.WriteToken(token); // The WriteToken method is used to write the token to a string.
         }
     }
 }

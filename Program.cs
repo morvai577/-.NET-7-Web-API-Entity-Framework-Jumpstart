@@ -6,6 +6,9 @@ global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using DotNetEnv;
 global using dotnet_rpg.Data;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
