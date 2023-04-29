@@ -6,7 +6,6 @@
 
 # Register user accounts
 
-
 # User/Character relationship
 
 # JSON Web Tokens (JWT)
