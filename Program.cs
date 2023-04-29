@@ -49,6 +49,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication(); // The UseAuthentication method adds the authentication middleware to the HTTP request pipeline. It tells the application to use authentication when processing requests. The UseAuthentication method must appear between the UseRouting and UseEndpoints methods.
+
 app.UseAuthorization();
 
 app.MapControllers();
