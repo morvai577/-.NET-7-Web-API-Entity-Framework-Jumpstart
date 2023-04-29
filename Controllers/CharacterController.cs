@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Mvc; // 2. Import required for ControllerBase
-
 namespace dotnet_rpg.Controllers
 {
+    [Authorize]
     [ApiController] // 3. Attribute is used to identify a class as a Web API controller. This attribute is essential because it informs the framework that the class should be treated as a controller, allowing it to handle incoming HTTP requests and route them to the appropriate action methods.
     [Route("api/[controller]")] // 4. The [Route("api/[controller]")] attribute in a .NET controller sets the route template for the entire controller. In this example, "api" is a fixed segment in the URL, while "[controller]" is a placeholder that gets replaced by the controller's name (without the "Controller" suffix) at runtime.
     public class CharacterController : ControllerBase // 1. All controllers must be derived from ControllerBase
