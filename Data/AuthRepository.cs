@@ -53,5 +53,14 @@ namespace dotnet_rpg.Data
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)); // 5. The ComputeHash method is used to generate a hash from the password. The password is converted to a byte array using the UTF8 encoding.
             }
         }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)); // 6. The ComputeHash method is used to generate a hash from the password. The password is converted to a byte array using the UTF8 encoding. 
+                return computedHash.SequenceEqual(passwordHash); // 7. The SequenceEqual method is used to compare the computed hash to the stored hash. The SequenceEqual method returns true if the two byte arrays are equal.
+            }
+        }
     }
 }
