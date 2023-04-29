@@ -8,5 +8,7 @@ namespace dotnet_rpg.Data
         }
 
         public DbSet<Character> Characters => Set<Character>(); // 2. The DataContext class contains a DbSet property for each entity set. In this example, there is a DbSet property for the Character entity set. Entity sets typically correspond to database tables, and an entity corresponds to a row in the table.
+
+        public DbSet<User> Users => Set<User>(); // 3. The DataContext class contains a DbSet property for each entity set. In this example, there is a DbSet property for the User entity set. Entity sets typically correspond to database tables, and an entity corresponds to a row in the table.
     }
 }
