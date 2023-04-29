@@ -14,12 +14,11 @@ namespace dotnet_rpg.Controllers
             _characterService = characterService;
         }
 
-        [AllowAnonymous] // The [AllowAnonymous] attribute is used to specify that the action method does not require authentication. The attribute can be applied to the controller class or to individual action methods.
         [HttpGet("GetAll")] // The [HttpGet] attribute is used to specify that the method responds to HTTP GET requests. The "GetAll" parameter is a route template that is appended to the route template of the controller. The final route for this action is "api/Character/GetAll".
         public async Task<ActionResult<ServiceResponse<List<GetCharacterResDto>>>> Get() // IActionResult provides a consistent way to package and deliver the results of your Web API actions, making it easier for both developers and client applications to understand and handle the outcomes of various requests.
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value); // The User property of ControllerBase is of type ClaimsPrincipal. The ClaimsPrincipal class provides access to the claims that are associated with the current user. The NameIdentifier claim is a unique identifier for the user. The Value property of the Claim object contains the value of the claim.
-            return Ok(await _characterService.GetAllCharacters());
+            return Ok(await _characterService.GetAllCharacters(userId));
         }
 
         [HttpGet("{id}")] // The {id} parameter is a placeholder for a route parameter. Route parameters are defined in the route template and are bound to the action method's parameters. In this example, the route parameter is bound to the id parameter of the GetSingle action method.
