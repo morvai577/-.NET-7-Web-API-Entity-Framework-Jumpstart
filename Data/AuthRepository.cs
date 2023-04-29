@@ -81,5 +81,10 @@ namespace dotnet_rpg.Data
                 return computedHash.SequenceEqual(passwordHash); // 7. The SequenceEqual method is used to compare the computed hash to the stored hash. The SequenceEqual method returns true if the two byte arrays are equal.
             }
         }
+
+        private string CreateToken(User user)
+        {
+            return string.Empty;
+        }
     }
 }
