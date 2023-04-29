@@ -24,5 +24,13 @@ namespace dotnet_rpg.Data
             return false;
         }
 
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) // 2. This method accepts a password and returns a password hash and salt. The password hash and salt are out parameters. An out parameter is used when a method returns more than one value.
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512()) // 3. The HMACSHA512 class is used to generate a hash. The using keyword is used to ensure that the HMACSHA512 object is disposed of after use.
+            {
+                passwordSalt = hmac.Key; // 4. The Key property is used to generate a random key
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)); // 5. The ComputeHash method is used to generate a hash from the password. The password is converted to a byte array using the UTF8 encoding.
+            }
+        }
     }
 }
