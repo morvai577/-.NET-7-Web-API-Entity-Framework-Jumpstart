@@ -12,6 +12,8 @@ global using System.Security.Claims;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,20 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => {
+    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme // Define the security schema for OAuth2
+    {
+        Description = """
+            Standard Authorization header using the Bearer scheme. 
+            Example: "bearer {token}"
+            """, // The description of the header
+        In = ParameterLocation.Header, // Add the token to the header
+        Name = "Authorization", // The name of the header
+        Type = SecuritySchemeType.ApiKey // The type of the header
+    });
+    
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 builder.Services.AddAutoMapper(typeof(Program).Assembly); // This is the assembly where the mapping profiles are located (in this case, the Program.cs file)
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
